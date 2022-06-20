@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 
 pub const CONFIG: Item<State> = Item::new("config_state");
 pub const TOKENINFO : Map<&str,TokenInfo> = Map::new("config_nfts");
+pub const OWNEDTOKEN : Map<&str, Vec<String>>= Map::new("config_owned");
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct State {
@@ -18,7 +19,8 @@ pub struct State {
     pub nft_address : String,
     pub token_address : String,
     pub can_stake : bool,
-    pub last_distribute:u64
+    pub last_distribute:u64,
+    pub distribute_period:u64
 }
 
 
@@ -30,6 +32,5 @@ pub struct TokenInfo {
     pub status : String,
     pub unstake_time:u64,
     pub stake_time:u64,
-    pub reward_juno:Uint128,
-    pub reward_hope:Uint128
+    pub reward_juno:Uint128
 }
