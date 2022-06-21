@@ -52,7 +52,7 @@ pub fn execute(
         ExecuteMsg::UnstakeNft { token_id } => execute_unstake_nft(deps, env, info, token_id),
         ExecuteMsg::WithdrawNft { token_id } => execute_withdraw_nft(deps, env, info, token_id),
         ExecuteMsg::GetReward {token_ids} =>execute_get_reward(deps, env, info, token_ids),
-        ExecuteMsg::DistributeReward { token_balance } => execute_distribute_reward(deps,env,info,token_balance),
+        ExecuteMsg::DistributeReward {  } => execute_distribute_reward(deps,env,info),
         ExecuteMsg::SetRewardWallet { address } => execute_reward_wallet(deps,env,info,address),
         ExecuteMsg::SetNftAddress { address } => execute_nft_address(deps,env,info,address),
         ExecuteMsg::SetTokenAddress { address } => execute_token_address(deps,env,info,address),
@@ -295,8 +295,7 @@ fn execute_get_reward(
 fn execute_distribute_reward(
     deps: DepsMut,
     env:  Env,
-    info: MessageInfo,
-    token_balance:Uint128
+    info: MessageInfo
 )->Result<Response,ContractError>{
 
     let state = CONFIG.load(deps.storage)?;
@@ -360,15 +359,7 @@ fn execute_distribute_reward(
         }    
     )?;
 
-    Ok(Response::new()
-    .add_message(CosmosMsg::Wasm(WasmMsg::Execute {
-             contract_addr: state.token_address, 
-             msg: to_binary(&Cw20ExecuteMsg::TransferFrom {
-                  owner:info.sender.to_string(),
-                  recipient:env.contract.address.to_string(), 
-                  amount: token_balance 
-                })? , 
-             funds: vec![] })))
+    Ok(Response::default())
 }
 
 
@@ -789,7 +780,7 @@ mod tests {
 
 
         let info = mock_info("reward_wallet1", &[]);     
-        let msg = ExecuteMsg::DistributeReward { token_balance:Uint128::new(0)  };
+        let msg = ExecuteMsg::DistributeReward {   };
         execute(deps.as_mut(),mock_env(),info,msg).unwrap();
 
         let token_infos = query_token_info(deps.as_ref()).unwrap();

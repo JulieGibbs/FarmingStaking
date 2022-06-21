@@ -21,7 +21,7 @@ pub enum ExecuteMsg {
     UnstakeNft{token_id:String},
     WithdrawNft{token_id:String},
     GetReward{token_ids:Vec<String>},  
-    DistributeReward{token_balance:Uint128},
+    DistributeReward{},
     SetRewardWallet{address:String},
     SetOwner{address:String},
     SetStakingPeriod{time:u64},   
